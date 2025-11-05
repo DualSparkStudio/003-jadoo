@@ -62,42 +62,42 @@
         }
       }
       nav.navbar.navbar-animate {
-        animation: slideDownFromTop 0.8s ease-out forwards;
+        animation: slideDownFromTop 0.4s ease-out forwards;
       }
       nav.navbar.navbar-animate:not(.animation-complete) {
         transform: translateY(-100%);
         opacity: 0;
       }
       img.hero-img.hero-img-animate {
-        animation: slideInFromRight 1s ease-out 0.3s forwards;
+        animation: slideInFromRight 0.45s ease-out 0.15s forwards;
       }
       img.hero-img.hero-img-animate:not(.animation-complete) {
         transform: translateX(100px);
         opacity: 0;
       }
       h4.hero-subtitle-animate {
-        animation: fadeInFromBottom 0.8s ease-out 0.5s forwards;
+        animation: fadeInFromBottom 0.4s ease-out 0.25s forwards;
       }
       h4.hero-subtitle-animate:not(.animation-complete) {
         transform: translateY(50px);
         opacity: 0;
       }
       h1.hero-title.hero-title-animate {
-        animation: fadeInFromBottom 0.8s ease-out 0.7s forwards;
+        animation: fadeInFromBottom 0.4s ease-out 0.35s forwards;
       }
       h1.hero-title.hero-title-animate:not(.animation-complete) {
         transform: translateY(50px);
         opacity: 0;
       }
       p.hero-description-animate {
-        animation: fadeInFromBottom 0.8s ease-out 0.9s forwards;
+        animation: fadeInFromBottom 0.4s ease-out 0.45s forwards;
       }
       p.hero-description-animate:not(.animation-complete) {
         transform: translateY(50px);
         opacity: 0;
       }
       .hero-button-animate {
-        animation: fadeInFromBottom 0.8s ease-out 1.1s forwards;
+        animation: fadeInFromBottom 0.4s ease-out 0.55s forwards;
       }
       .hero-button-animate:not(.animation-complete) {
         transform: translateY(50px);
@@ -149,7 +149,7 @@
       .scroll-animate-bottom {
         transform: translateY(100px);
         opacity: 0;
-        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
       }
       .scroll-animate-bottom.scroll-visible {
         transform: translateY(0);
@@ -159,7 +159,7 @@
       .scroll-animate-scale {
         transform: scale(0.8);
         opacity: 0;
-        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
       }
       .scroll-animate-scale.scroll-visible {
         transform: scale(1);
@@ -178,7 +178,7 @@
       .scroll-animate-left {
         transform: translateX(-80px);
         opacity: 0;
-        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
       }
       .scroll-animate-left.scroll-visible {
         transform: translateX(0);
@@ -192,7 +192,7 @@
       .scroll-animate-right {
         transform: translateX(80px);
         opacity: 0;
-        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
       }
       .scroll-animate-right.scroll-visible {
         transform: translateX(0);
@@ -206,7 +206,7 @@
       .scroll-animate-fade-left {
         transform: translateX(-50px);
         opacity: 0;
-        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
       }
       .scroll-animate-fade-left.scroll-visible {
         transform: translateX(0);
@@ -220,7 +220,7 @@
       .scroll-animate-fade-right {
         transform: translateX(50px);
         opacity: 0;
-        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
       }
       .scroll-animate-fade-right.scroll-visible {
         transform: translateX(0);
@@ -234,7 +234,7 @@
       .scroll-animate-fade {
         opacity: 0;
         transform: scale(0.9);
-        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
       }
       .scroll-animate-fade.scroll-visible {
         opacity: 1;
@@ -261,7 +261,7 @@
       }
       /* Navbar Reverse Animation on Scroll */
       nav.navbar.navbar-animate {
-        transition: transform 0.5s ease-out, opacity 0.5s ease-out !important;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out !important;
       }
       nav.navbar.navbar-scrolled-up {
         transform: translateY(-100%) !important;
@@ -844,35 +844,35 @@
                 if (!isHeroElement || element.classList.contains('animation-complete')) {
                   element.classList.add('scroll-visible');
                   // Stagger animation for service cards
-                  if (element.classList.contains('scroll-animate-bottom')) {
-                    const cards = document.querySelectorAll('.scroll-animate-bottom');
-                    const index = Array.from(cards).indexOf(element);
-                    element.style.transitionDelay = (index * 0.1) + 's';
-                  }
-                  // Stagger animation for destination cards
-                  if (element.classList.contains('scroll-animate-scale')) {
-                    const cards = document.querySelectorAll('.scroll-animate-scale');
-                    const index = Array.from(cards).indexOf(element);
-                    element.style.transitionDelay = (index * 0.15) + 's';
-                  }
-                  // Stagger animation for booking left items
-                  if (element.classList.contains('scroll-animate-left')) {
-                    const items = document.querySelectorAll('.scroll-animate-left');
-                    const index = Array.from(items).indexOf(element);
-                    element.style.transitionDelay = (index * 0.15) + 's';
-                  }
-                  // Stagger animation for partner logos
-                  if (element.classList.contains('scroll-animate-fade')) {
-                    const items = document.querySelectorAll('.scroll-animate-fade');
-                    const index = Array.from(items).indexOf(element);
-                    element.style.transitionDelay = (index * 0.1) + 's';
-                  }
-                  // Stagger animation for hero right (image)
-                  if (element.classList.contains('scroll-animate-right')) {
-                    const items = document.querySelectorAll('.scroll-animate-right');
-                    const index = Array.from(items).indexOf(element);
-                    element.style.transitionDelay = (index * 0.1) + 's';
-                  }
+                if (element.classList.contains('scroll-animate-bottom')) {
+                  const cards = document.querySelectorAll('.scroll-animate-bottom');
+                  const index = Array.from(cards).indexOf(element);
+                  element.style.transitionDelay = (index * 0.05) + 's';
+                }
+                // Stagger animation for destination cards
+                if (element.classList.contains('scroll-animate-scale')) {
+                  const cards = document.querySelectorAll('.scroll-animate-scale');
+                  const index = Array.from(cards).indexOf(element);
+                  element.style.transitionDelay = (index * 0.07) + 's';
+                }
+                // Stagger animation for booking left items
+                if (element.classList.contains('scroll-animate-left')) {
+                  const items = document.querySelectorAll('.scroll-animate-left');
+                  const index = Array.from(items).indexOf(element);
+                  element.style.transitionDelay = (index * 0.07) + 's';
+                }
+                // Stagger animation for partner logos
+                if (element.classList.contains('scroll-animate-fade')) {
+                  const items = document.querySelectorAll('.scroll-animate-fade');
+                  const index = Array.from(items).indexOf(element);
+                  element.style.transitionDelay = (index * 0.05) + 's';
+                }
+                // Stagger animation for hero right (image)
+                if (element.classList.contains('scroll-animate-right')) {
+                  const items = document.querySelectorAll('.scroll-animate-right');
+                  const index = Array.from(items).indexOf(element);
+                  element.style.transitionDelay = (index * 0.05) + 's';
+                }
                 }
               }
             } else {
@@ -889,35 +889,35 @@
                 if (!isHeroElement || element.classList.contains('animation-complete')) {
                   element.classList.add('scroll-visible');
                   // Stagger animation for service cards
-                  if (element.classList.contains('scroll-animate-bottom')) {
-                    const cards = document.querySelectorAll('.scroll-animate-bottom');
-                    const index = Array.from(cards).indexOf(element);
-                    element.style.transitionDelay = (index * 0.1) + 's';
-                  }
-                  // Stagger animation for destination cards
-                  if (element.classList.contains('scroll-animate-scale')) {
-                    const cards = document.querySelectorAll('.scroll-animate-scale');
-                    const index = Array.from(cards).indexOf(element);
-                    element.style.transitionDelay = (index * 0.15) + 's';
-                  }
-                  // Stagger animation for booking left items
-                  if (element.classList.contains('scroll-animate-left')) {
-                    const items = document.querySelectorAll('.scroll-animate-left');
-                    const index = Array.from(items).indexOf(element);
-                    element.style.transitionDelay = (index * 0.15) + 's';
-                  }
-                  // Stagger animation for partner logos
-                  if (element.classList.contains('scroll-animate-fade')) {
-                    const items = document.querySelectorAll('.scroll-animate-fade');
-                    const index = Array.from(items).indexOf(element);
-                    element.style.transitionDelay = (index * 0.1) + 's';
-                  }
-                  // Stagger animation for hero right (image)
-                  if (element.classList.contains('scroll-animate-right')) {
-                    const items = document.querySelectorAll('.scroll-animate-right');
-                    const index = Array.from(items).indexOf(element);
-                    element.style.transitionDelay = (index * 0.1) + 's';
-                  }
+                if (element.classList.contains('scroll-animate-bottom')) {
+                  const cards = document.querySelectorAll('.scroll-animate-bottom');
+                  const index = Array.from(cards).indexOf(element);
+                  element.style.transitionDelay = (index * 0.05) + 's';
+                }
+                // Stagger animation for destination cards
+                if (element.classList.contains('scroll-animate-scale')) {
+                  const cards = document.querySelectorAll('.scroll-animate-scale');
+                  const index = Array.from(cards).indexOf(element);
+                  element.style.transitionDelay = (index * 0.07) + 's';
+                }
+                // Stagger animation for booking left items
+                if (element.classList.contains('scroll-animate-left')) {
+                  const items = document.querySelectorAll('.scroll-animate-left');
+                  const index = Array.from(items).indexOf(element);
+                  element.style.transitionDelay = (index * 0.07) + 's';
+                }
+                // Stagger animation for partner logos
+                if (element.classList.contains('scroll-animate-fade')) {
+                  const items = document.querySelectorAll('.scroll-animate-fade');
+                  const index = Array.from(items).indexOf(element);
+                  element.style.transitionDelay = (index * 0.05) + 's';
+                }
+                // Stagger animation for hero right (image)
+                if (element.classList.contains('scroll-animate-right')) {
+                  const items = document.querySelectorAll('.scroll-animate-right');
+                  const index = Array.from(items).indexOf(element);
+                  element.style.transitionDelay = (index * 0.05) + 's';
+                }
                 }
               }
               
