@@ -803,10 +803,19 @@
             const elementTop = rect.top;
             const elementBottom = rect.bottom;
             const windowHeight = window.innerHeight;
+            const windowMiddle = windowHeight / 2;
+            
+            // Element is in viewport
             const isInView = elementTop < windowHeight - 100 && elementBottom > 100;
             
+            // Check if element is about to leave viewport (for reverse animation)
+            // When scrolling up: if element top passes above 60% of viewport, it's leaving
+            // When scrolling down: normal entry behavior
+            const leavingThreshold = windowHeight * 0.6; // 60% from top
+            const isLeavingViewport = !scrollingDown && elementTop > leavingThreshold;
+            
             if (scrollingDown) {
-              // Scrolling down - animate in
+              // Scrolling down - animate in when entering viewport
               if (isInView) {
                 element.classList.add('scroll-visible');
                 // Stagger animation for service cards
@@ -835,8 +844,14 @@
                 }
               }
             } else {
-              // Scrolling up - animate out (reverse)
-              if (!isInView) {
+              // Scrolling up - reverse animate when section is about to leave viewport
+              // Trigger reverse when element top passes above 60% of viewport height
+              if (isLeavingViewport && element.classList.contains('scroll-visible')) {
+                element.classList.remove('scroll-visible');
+                element.style.transitionDelay = '0s';
+              }
+              // Also hide if completely out of view
+              if (!isInView && element.classList.contains('scroll-visible')) {
                 element.classList.remove('scroll-visible');
                 element.style.transitionDelay = '0s';
               }
