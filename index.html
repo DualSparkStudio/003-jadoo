@@ -33,71 +33,94 @@
       /* Page Load Animations */
       @keyframes slideDownFromTop {
         0% { 
-          transform: translateY(-100%) !important; 
-          opacity: 0 !important; 
+          transform: translateY(-100%); 
+          opacity: 0; 
         }
         100% { 
-          transform: translateY(0) !important; 
-          opacity: 1 !important; 
+          transform: translateY(0); 
+          opacity: 1; 
         }
       }
       @keyframes slideInFromRight {
         0% { 
-          transform: translateX(100px) !important; 
-          opacity: 0 !important; 
+          transform: translateX(100px); 
+          opacity: 0; 
         }
         100% { 
-          transform: translateX(0) !important; 
-          opacity: 1 !important; 
+          transform: translateX(0); 
+          opacity: 1; 
         }
       }
       @keyframes fadeInFromBottom {
         0% { 
-          transform: translateY(50px) !important; 
-          opacity: 0 !important; 
+          transform: translateY(50px); 
+          opacity: 0; 
         }
         100% { 
-          transform: translateY(0) !important; 
-          opacity: 1 !important; 
+          transform: translateY(0); 
+          opacity: 1; 
         }
       }
       nav.navbar.navbar-animate {
-        animation: slideDownFromTop 0.8s ease-out forwards !important;
-        transform: translateY(-100%) !important;
-        opacity: 0 !important;
+        animation: slideDownFromTop 0.8s ease-out forwards;
+      }
+      nav.navbar.navbar-animate:not(.animation-complete) {
+        transform: translateY(-100%);
+        opacity: 0;
       }
       img.hero-img.hero-img-animate {
-        animation: slideInFromRight 1s ease-out 0.3s forwards !important;
-        transform: translateX(100px) !important;
-        opacity: 0 !important;
+        animation: slideInFromRight 1s ease-out 0.3s forwards;
+      }
+      img.hero-img.hero-img-animate:not(.animation-complete) {
+        transform: translateX(100px);
+        opacity: 0;
       }
       h4.hero-subtitle-animate {
-        animation: fadeInFromBottom 0.8s ease-out 0.5s forwards !important;
-        transform: translateY(50px) !important;
-        opacity: 0 !important;
+        animation: fadeInFromBottom 0.8s ease-out 0.5s forwards;
+      }
+      h4.hero-subtitle-animate:not(.animation-complete) {
+        transform: translateY(50px);
+        opacity: 0;
       }
       h1.hero-title.hero-title-animate {
-        animation: fadeInFromBottom 0.8s ease-out 0.7s forwards !important;
-        transform: translateY(50px) !important;
-        opacity: 0 !important;
+        animation: fadeInFromBottom 0.8s ease-out 0.7s forwards;
+      }
+      h1.hero-title.hero-title-animate:not(.animation-complete) {
+        transform: translateY(50px);
+        opacity: 0;
       }
       p.hero-description-animate {
-        animation: fadeInFromBottom 0.8s ease-out 0.9s forwards !important;
-        transform: translateY(50px) !important;
-        opacity: 0 !important;
+        animation: fadeInFromBottom 0.8s ease-out 0.9s forwards;
+      }
+      p.hero-description-animate:not(.animation-complete) {
+        transform: translateY(50px);
+        opacity: 0;
       }
       .hero-button-animate {
-        animation: fadeInFromBottom 0.8s ease-out 1.1s forwards !important;
-        transform: translateY(50px) !important;
-        opacity: 0 !important;
+        animation: fadeInFromBottom 0.8s ease-out 1.1s forwards;
+      }
+      .hero-button-animate:not(.animation-complete) {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      /* Fallback: Show elements if animation fails */
+      nav.navbar.navbar-animate.animation-complete,
+      img.hero-img.hero-img-animate.animation-complete,
+      h4.hero-subtitle-animate.animation-complete,
+      h1.hero-title.hero-title-animate.animation-complete,
+      p.hero-description-animate.animation-complete,
+      .hero-button-animate.animation-complete {
+        animation: none;
+        transform: none;
+        opacity: 1;
       }
       @media (prefers-reduced-motion: reduce) {
         nav.navbar.navbar-animate, img.hero-img.hero-img-animate, 
         h4.hero-subtitle-animate, h1.hero-title.hero-title-animate, 
         p.hero-description-animate, .hero-button-animate {
-          animation: none !important;
-          transform: none !important;
-          opacity: 1 !important;
+          animation: none;
+          transform: none;
+          opacity: 1;
         }
       }
     </style>
@@ -542,8 +565,33 @@
       // Ensure animations start after DOM is ready
       document.addEventListener('DOMContentLoaded', function() {
         // Force reflow to trigger animations
-        document.querySelector('.navbar-animate')?.offsetHeight;
-        document.querySelectorAll('.hero-img-animate, .hero-subtitle-animate, .hero-title-animate, .hero-description-animate, .hero-button-animate').forEach(el => el.offsetHeight);
+        const navbar = document.querySelector('.navbar-animate');
+        const heroElements = document.querySelectorAll('.hero-img-animate, .hero-subtitle-animate, .hero-title-animate, .hero-description-animate, .hero-button-animate');
+        
+        // Small delay to ensure styles are applied
+        setTimeout(function() {
+          // Trigger reflow
+          if (navbar) {
+            void navbar.offsetHeight;
+            // Ensure animation starts
+            navbar.style.animationPlayState = 'running';
+          }
+          heroElements.forEach(function(el) {
+            void el.offsetHeight;
+            el.style.animationPlayState = 'running';
+          });
+        }, 10);
+        
+        // Fallback: Show elements after animation duration if still hidden
+        setTimeout(function() {
+          const allElements = [navbar, ...Array.from(heroElements)].filter(Boolean);
+          allElements.forEach(function(el) {
+            const style = window.getComputedStyle(el);
+            if (style.opacity === '0' || style.visibility === 'hidden') {
+              el.classList.add('animation-complete');
+            }
+          });
+        }, 2500);
       });
     </script>
     <script src="assets/js/theme.js"></script>
