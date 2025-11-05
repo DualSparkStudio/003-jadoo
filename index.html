@@ -812,7 +812,9 @@
             // When scrolling up: if element top passes above 60% of viewport, it's leaving
             // When scrolling down: normal entry behavior
             const leavingThreshold = windowHeight * 0.6; // 60% from top
+            const enteringThreshold = windowHeight * 0.4; // 40% from top (for scroll up entry)
             const isLeavingViewport = !scrollingDown && elementTop > leavingThreshold;
+            const isEnteringFromBottom = !scrollingDown && elementBottom > enteringThreshold && elementTop < windowHeight - 100;
             
             if (scrollingDown) {
               // Scrolling down - animate in when entering viewport
@@ -844,7 +846,37 @@
                 }
               }
             } else {
-              // Scrolling up - reverse animate when section is about to leave viewport
+              // Scrolling up
+              // 1. Animate IN when entering viewport from bottom
+              if (isEnteringFromBottom && !element.classList.contains('scroll-visible')) {
+                element.classList.add('scroll-visible');
+                // Stagger animation for service cards
+                if (element.classList.contains('scroll-animate-bottom')) {
+                  const cards = document.querySelectorAll('.scroll-animate-bottom');
+                  const index = Array.from(cards).indexOf(element);
+                  element.style.transitionDelay = (index * 0.1) + 's';
+                }
+                // Stagger animation for destination cards
+                if (element.classList.contains('scroll-animate-scale')) {
+                  const cards = document.querySelectorAll('.scroll-animate-scale');
+                  const index = Array.from(cards).indexOf(element);
+                  element.style.transitionDelay = (index * 0.15) + 's';
+                }
+                // Stagger animation for booking left items
+                if (element.classList.contains('scroll-animate-left')) {
+                  const items = document.querySelectorAll('.scroll-animate-left');
+                  const index = Array.from(items).indexOf(element);
+                  element.style.transitionDelay = (index * 0.15) + 's';
+                }
+                // Stagger animation for partner logos
+                if (element.classList.contains('scroll-animate-fade')) {
+                  const items = document.querySelectorAll('.scroll-animate-fade');
+                  const index = Array.from(items).indexOf(element);
+                  element.style.transitionDelay = (index * 0.1) + 's';
+                }
+              }
+              
+              // 2. Reverse animate OUT when section is about to leave viewport
               // Trigger reverse when element top passes above 60% of viewport height
               if (isLeavingViewport && element.classList.contains('scroll-visible')) {
                 element.classList.remove('scroll-visible');
