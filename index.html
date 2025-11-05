@@ -175,12 +175,24 @@
         opacity: 0;
       }
       /* Navbar Reverse Animation on Scroll */
+      nav.navbar.navbar-animate {
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out !important;
+      }
       nav.navbar.navbar-scrolled-up {
-        animation: slideUpToTop 0.5s ease-out forwards;
+        transform: translateY(-100%) !important;
+        opacity: 0 !important;
         pointer-events: none;
+        visibility: hidden;
       }
       nav.navbar.navbar-scrolled-down {
-        animation: slideDownFromTop 0.5s ease-out forwards;
+        transform: translateY(0) !important;
+        opacity: 1 !important;
+        visibility: visible;
+      }
+      /* Ensure navbar starts visible after initial animation */
+      nav.navbar.navbar-animate.animation-complete {
+        transform: translateY(0) !important;
+        opacity: 1 !important;
       }
       @media (prefers-reduced-motion: reduce) {
         nav.navbar.navbar-animate, img.hero-img.hero-img-animate, 
@@ -673,28 +685,39 @@
         const navbarElement = document.querySelector('.navbar-animate');
         
         // Navbar scroll behavior - hide when scrolling down, show when scrolling up
-        window.addEventListener('scroll', function() {
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          
-          // Track scroll direction
-          scrollDirection = scrollTop > lastScrollTop ? 'down' : 'up';
-          
-          // Navbar behavior
-          if (scrollTop > lastScrollTop && scrollTop > 100) {
-            // Scrolling down - hide navbar
-            if (navbarElement && !navbarElement.classList.contains('navbar-scrolled-up')) {
-              navbarElement.classList.remove('navbar-scrolled-down');
-              navbarElement.classList.add('navbar-scrolled-up');
-            }
-          } else if (scrollTop < lastScrollTop) {
-            // Scrolling up - show navbar
-            if (navbarElement && navbarElement.classList.contains('navbar-scrolled-up')) {
-              navbarElement.classList.remove('navbar-scrolled-up');
-              navbarElement.classList.add('navbar-scrolled-down');
-            }
+        // This should work continuously on every scroll
+        // Wait for initial animation to complete first, then enable scroll behavior
+        setTimeout(function() {
+          // Initialize navbar as visible after page load animation
+          if (navbarElement) {
+            navbarElement.classList.add('navbar-scrolled-down');
+            navbarElement.classList.remove('navbar-scrolled-up');
           }
-          lastScrollTop = scrollTop;
-        }, false);
+          
+          let navbarScrollHandler = function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Track scroll direction
+            scrollDirection = scrollTop > lastScrollTop ? 'down' : 'up';
+            
+            // Navbar behavior - works on every scroll continuously
+            if (navbarElement) {
+              if (scrollTop > lastScrollTop && scrollTop > 50) {
+                // Scrolling down - hide navbar (slide up)
+                navbarElement.classList.remove('navbar-scrolled-down');
+                navbarElement.classList.add('navbar-scrolled-up');
+              } else if (scrollTop < lastScrollTop || scrollTop <= 50) {
+                // Scrolling up or at top - show navbar (slide down)
+                navbarElement.classList.remove('navbar-scrolled-up');
+                navbarElement.classList.add('navbar-scrolled-down');
+              }
+            }
+            lastScrollTop = scrollTop;
+          };
+          
+          // Add scroll listener - fires on every scroll
+          window.addEventListener('scroll', navbarScrollHandler, { passive: true });
+        }, 1000); // Wait 1 second for initial animation to complete
 
         // Track animated elements
         const animatedElements = document.querySelectorAll('.scroll-animate-bottom, .scroll-animate-scale');
