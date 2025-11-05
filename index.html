@@ -165,6 +165,15 @@
         transform: scale(1);
         opacity: 1;
       }
+      /* Reverse animations for scroll up */
+      .scroll-animate-bottom:not(.scroll-visible) {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      .scroll-animate-scale:not(.scroll-visible) {
+        transform: scale(0.8);
+        opacity: 0;
+      }
       /* Navbar Reverse Animation on Scroll */
       nav.navbar.navbar-scrolled-up {
         animation: slideUpToTop 0.5s ease-out forwards;
@@ -660,12 +669,17 @@
 
         // Scroll animations
         let lastScrollTop = 0;
+        let scrollDirection = 'down';
         const navbarElement = document.querySelector('.navbar-animate');
         
         // Navbar scroll behavior - hide when scrolling down, show when scrolling up
         window.addEventListener('scroll', function() {
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
           
+          // Track scroll direction
+          scrollDirection = scrollTop > lastScrollTop ? 'down' : 'up';
+          
+          // Navbar behavior
           if (scrollTop > lastScrollTop && scrollTop > 100) {
             // Scrolling down - hide navbar
             if (navbarElement && !navbarElement.classList.contains('navbar-scrolled-up')) {
@@ -682,36 +696,76 @@
           lastScrollTop = scrollTop;
         }, false);
 
-        // Intersection Observer for scroll animations
+        // Track animated elements
+        const animatedElements = document.querySelectorAll('.scroll-animate-bottom, .scroll-animate-scale');
+        let lastScrollYForElements = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Function to check and animate elements on scroll
+        function checkScrollAnimations() {
+          const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollingDown = currentScrollY > lastScrollYForElements;
+          
+          animatedElements.forEach(function(element) {
+            const rect = element.getBoundingClientRect();
+            const elementTop = rect.top;
+            const elementBottom = rect.bottom;
+            const windowHeight = window.innerHeight;
+            const isInView = elementTop < windowHeight - 100 && elementBottom > 100;
+            
+            if (scrollingDown) {
+              // Scrolling down - animate in
+              if (isInView) {
+                element.classList.add('scroll-visible');
+                // Stagger animation for service cards
+                if (element.classList.contains('scroll-animate-bottom')) {
+                  const cards = document.querySelectorAll('.scroll-animate-bottom');
+                  const index = Array.from(cards).indexOf(element);
+                  element.style.transitionDelay = (index * 0.1) + 's';
+                }
+                // Stagger animation for destination cards
+                if (element.classList.contains('scroll-animate-scale')) {
+                  const cards = document.querySelectorAll('.scroll-animate-scale');
+                  const index = Array.from(cards).indexOf(element);
+                  element.style.transitionDelay = (index * 0.15) + 's';
+                }
+              }
+            } else {
+              // Scrolling up - animate out (reverse)
+              if (!isInView) {
+                element.classList.remove('scroll-visible');
+                element.style.transitionDelay = '0s';
+              }
+            }
+          });
+          
+          lastScrollYForElements = currentScrollY;
+        }
+        
+        // Intersection Observer for initial trigger
         const observerOptions = {
-          threshold: 0.1,
-          rootMargin: '0px 0px -50px 0px'
+          threshold: [0, 0.1, 0.3, 0.5, 1.0],
+          rootMargin: '0px 0px -100px 0px'
         };
 
         const observer = new IntersectionObserver(function(entries) {
           entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('scroll-visible');
-              // Stagger animation for service cards
-              if (entry.target.classList.contains('scroll-animate-bottom')) {
-                const cards = document.querySelectorAll('.scroll-animate-bottom');
-                const index = Array.from(cards).indexOf(entry.target);
-                entry.target.style.transitionDelay = (index * 0.1) + 's';
-              }
-              // Stagger animation for destination cards
-              if (entry.target.classList.contains('scroll-animate-scale')) {
-                const cards = document.querySelectorAll('.scroll-animate-scale');
-                const index = Array.from(cards).indexOf(entry.target);
-                entry.target.style.transitionDelay = (index * 0.15) + 's';
-              }
-            }
+            checkScrollAnimations();
           });
         }, observerOptions);
 
         // Observe all scroll-animate elements
-        document.querySelectorAll('.scroll-animate-bottom, .scroll-animate-scale').forEach(function(el) {
+        animatedElements.forEach(function(el) {
           observer.observe(el);
         });
+        
+        // Also check on every scroll event
+        let scrollTimeout;
+        window.addEventListener('scroll', function() {
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(function() {
+            checkScrollAnimations();
+          }, 10);
+        }, { passive: true });
       });
     </script>
     <script src="assets/js/theme.js"></script>
