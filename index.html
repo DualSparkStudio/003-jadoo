@@ -114,11 +114,76 @@
         transform: none;
         opacity: 1;
       }
+      /* Scroll Animations */
+      @keyframes slideUpFromBottom {
+        0% {
+          transform: translateY(100px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      @keyframes scaleInFromOutside {
+        0% {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      @keyframes slideUpToTop {
+        0% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100%);
+          opacity: 0;
+        }
+      }
+      /* Section 2 - Bottom to Top Animation */
+      .scroll-animate-bottom {
+        transform: translateY(100px);
+        opacity: 0;
+        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+      }
+      .scroll-animate-bottom.scroll-visible {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      /* Section 3 - Scale In from Outside */
+      .scroll-animate-scale {
+        transform: scale(0.8);
+        opacity: 0;
+        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+      }
+      .scroll-animate-scale.scroll-visible {
+        transform: scale(1);
+        opacity: 1;
+      }
+      /* Navbar Reverse Animation on Scroll */
+      nav.navbar.navbar-scrolled-up {
+        animation: slideUpToTop 0.5s ease-out forwards;
+        pointer-events: none;
+      }
+      nav.navbar.navbar-scrolled-down {
+        animation: slideDownFromTop 0.5s ease-out forwards;
+      }
       @media (prefers-reduced-motion: reduce) {
         nav.navbar.navbar-animate, img.hero-img.hero-img-animate, 
         h4.hero-subtitle-animate, h1.hero-title.hero-title-animate, 
-        p.hero-description-animate, .hero-button-animate {
+        p.hero-description-animate, .hero-button-animate,
+        .scroll-animate-bottom, .scroll-animate-scale {
           animation: none;
+          transform: none;
+          opacity: 1;
+        }
+        .scroll-animate-bottom.scroll-visible,
+        .scroll-animate-scale.scroll-visible {
           transform: none;
           opacity: 1;
         }
@@ -186,7 +251,7 @@
             <h3 class="fs-xl-10 fs-lg-8 fs-7 fw-bold font-cursive text-capitalize">We Offer Best Services</h3>
           </div>
           <div class="row">
-            <div class="col-lg-3 col-sm-6 mb-6">
+            <div class="col-lg-3 col-sm-6 mb-6 scroll-animate-bottom">
               <div class="card service-card shadow-hover rounded-3 text-center align-items-center">
                 <div class="card-body p-xxl-5 p-4"> <img src="assets/img/category/icon1.png" width="75" alt="Service" />
                   <h4 class="mb-3">Calculated Weather</h4>
@@ -194,7 +259,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6 mb-6">
+            <div class="col-lg-3 col-sm-6 mb-6 scroll-animate-bottom">
               <div class="card service-card shadow-hover rounded-3 text-center align-items-center">
                 <div class="card-body p-xxl-5 p-4"> <img src="assets/img/category/icon2.png" width="75" alt="Service" />
                   <h4 class="mb-3">Best Flights</h4>
@@ -202,7 +267,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6 mb-6">
+            <div class="col-lg-3 col-sm-6 mb-6 scroll-animate-bottom">
               <div class="card service-card shadow-hover rounded-3 text-center align-items-center">
                 <div class="card-body p-xxl-5 p-4"> <img src="assets/img/category/icon3.png" width="75" alt="Service" />
                   <h4 class="mb-3">Local Events</h4>
@@ -210,7 +275,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-3 col-sm-6 mb-6">
+            <div class="col-lg-3 col-sm-6 mb-6 scroll-animate-bottom">
               <div class="card service-card shadow-hover rounded-3 text-center align-items-center">
                 <div class="card-body p-xxl-5 p-4"> <img src="assets/img/category/icon4.png" width="75" alt="Service" />
                   <h4 class="mb-3">Customization</h4>
@@ -239,7 +304,7 @@
             <h3 class="fs-xl-10 fs-lg-8 fs-7 fw-bold font-cursive text-capitalize">Top Destinations</h3>
           </div>
           <div class="row">
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 scroll-animate-scale">
               <div class="card overflow-hidden shadow"> <img class="card-img-top" src="assets/img/dest/dest1.jpg" alt="Rome, Italty" />
                 <div class="card-body py-4 px-3">
                   <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
@@ -249,7 +314,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 scroll-animate-scale">
               <div class="card overflow-hidden shadow"> <img class="card-img-top" src="assets/img/dest/dest2.jpg" alt="London, UK" />
                 <div class="card-body py-4 px-3">
                   <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
@@ -259,7 +324,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 scroll-animate-scale">
               <div class="card overflow-hidden shadow"> <img class="card-img-top" src="assets/img/dest/dest3.jpg" alt="Full Europe" />
                 <div class="card-body py-4 px-3">
                   <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
@@ -592,6 +657,61 @@
             }
           });
         }, 2500);
+
+        // Scroll animations
+        let lastScrollTop = 0;
+        const navbarElement = document.querySelector('.navbar-animate');
+        
+        // Navbar scroll behavior - hide when scrolling down, show when scrolling up
+        window.addEventListener('scroll', function() {
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          
+          if (scrollTop > lastScrollTop && scrollTop > 100) {
+            // Scrolling down - hide navbar
+            if (navbarElement && !navbarElement.classList.contains('navbar-scrolled-up')) {
+              navbarElement.classList.remove('navbar-scrolled-down');
+              navbarElement.classList.add('navbar-scrolled-up');
+            }
+          } else if (scrollTop < lastScrollTop) {
+            // Scrolling up - show navbar
+            if (navbarElement && navbarElement.classList.contains('navbar-scrolled-up')) {
+              navbarElement.classList.remove('navbar-scrolled-up');
+              navbarElement.classList.add('navbar-scrolled-down');
+            }
+          }
+          lastScrollTop = scrollTop;
+        }, false);
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('scroll-visible');
+              // Stagger animation for service cards
+              if (entry.target.classList.contains('scroll-animate-bottom')) {
+                const cards = document.querySelectorAll('.scroll-animate-bottom');
+                const index = Array.from(cards).indexOf(entry.target);
+                entry.target.style.transitionDelay = (index * 0.1) + 's';
+              }
+              // Stagger animation for destination cards
+              if (entry.target.classList.contains('scroll-animate-scale')) {
+                const cards = document.querySelectorAll('.scroll-animate-scale');
+                const index = Array.from(cards).indexOf(entry.target);
+                entry.target.style.transitionDelay = (index * 0.15) + 's';
+              }
+            }
+          });
+        }, observerOptions);
+
+        // Observe all scroll-animate elements
+        document.querySelectorAll('.scroll-animate-bottom, .scroll-animate-scale').forEach(function(el) {
+          observer.observe(el);
+        });
       });
     </script>
     <script src="assets/js/theme.js"></script>
