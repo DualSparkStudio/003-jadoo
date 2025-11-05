@@ -318,12 +318,12 @@
 
         <div class="container">
           <div class="row align-items-center">
-            <div class="col-md-5 col-lg-6 order-0 order-md-1 text-end"><img class="pt-7 pt-md-0 hero-img hero-img-animate" src="assets/img/hero/hero-img.png" alt="hero-header" /></div>
+            <div class="col-md-5 col-lg-6 order-0 order-md-1 text-end scroll-animate-right"><img class="pt-7 pt-md-0 hero-img hero-img-animate" src="assets/img/hero/hero-img.png" alt="hero-header" /></div>
             <div class="col-md-7 col-lg-6 text-md-start text-center py-6">
-              <h4 class="fw-bold text-danger mb-3 hero-subtitle-animate">Best Destinations around the world</h4>
-              <h1 class="hero-title hero-title-animate">Travel, enjoy and live a new and full life</h1>
-              <p class="mb-4 fw-medium hero-description-animate">Built Wicket longer admire do barton vanity itself do in it.<br class="d-none d-xl-block" />Preferred to sportsmen it engrossed listening. Park gate<br class="d-none d-xl-block" />sell they west hard for the.</p>
-              <div class="text-center text-md-start hero-button-animate"> <a class="btn btn-primary btn-lg me-md-4 mb-3 mb-md-0 border-0 primary-btn-shadow" href="#!" role="button">Find out more</a>
+              <h4 class="fw-bold text-danger mb-3 hero-subtitle-animate scroll-animate-bottom">Best Destinations around the world</h4>
+              <h1 class="hero-title hero-title-animate scroll-animate-bottom">Travel, enjoy and live a new and full life</h1>
+              <p class="mb-4 fw-medium hero-description-animate scroll-animate-bottom">Built Wicket longer admire do barton vanity itself do in it.<br class="d-none d-xl-block" />Preferred to sportsmen it engrossed listening. Park gate<br class="d-none d-xl-block" />sell they west hard for the.</p>
+              <div class="text-center text-md-start hero-button-animate scroll-animate-bottom"> <a class="btn btn-primary btn-lg me-md-4 mb-3 mb-md-0 border-0 primary-btn-shadow" href="#!" role="button">Find out more</a>
               </div>
             </div>
           </div>
@@ -747,6 +747,20 @@
               el.classList.add('animation-complete');
             }
           });
+          
+          // After page load animations complete, ensure hero section is ready for scroll animations
+          // Remove initial animation states and let scroll animations take over
+          const heroScrollElements = document.querySelectorAll('.hero-img-animate, .hero-subtitle-animate, .hero-title-animate, .hero-description-animate, .hero-button-animate');
+          heroScrollElements.forEach(function(el) {
+            // Check if element has scroll animation class
+            if (el.classList.contains('scroll-animate-bottom') || el.classList.contains('scroll-animate-right')) {
+              // Remove page-load animation classes after completion
+              setTimeout(function() {
+                // Keep the scroll animation classes, but ensure they're ready for scroll
+                el.classList.add('animation-complete');
+              }, 100);
+            }
+          });
         }, 2500);
 
         // Scroll animations
@@ -819,60 +833,91 @@
             if (scrollingDown) {
               // Scrolling down - animate in when entering viewport
               if (isInView) {
-                element.classList.add('scroll-visible');
-                // Stagger animation for service cards
-                if (element.classList.contains('scroll-animate-bottom')) {
-                  const cards = document.querySelectorAll('.scroll-animate-bottom');
-                  const index = Array.from(cards).indexOf(element);
-                  element.style.transitionDelay = (index * 0.1) + 's';
-                }
-                // Stagger animation for destination cards
-                if (element.classList.contains('scroll-animate-scale')) {
-                  const cards = document.querySelectorAll('.scroll-animate-scale');
-                  const index = Array.from(cards).indexOf(element);
-                  element.style.transitionDelay = (index * 0.15) + 's';
-                }
-                // Stagger animation for booking left items
-                if (element.classList.contains('scroll-animate-left')) {
-                  const items = document.querySelectorAll('.scroll-animate-left');
-                  const index = Array.from(items).indexOf(element);
-                  element.style.transitionDelay = (index * 0.15) + 's';
-                }
-                // Stagger animation for partner logos
-                if (element.classList.contains('scroll-animate-fade')) {
-                  const items = document.querySelectorAll('.scroll-animate-fade');
-                  const index = Array.from(items).indexOf(element);
-                  element.style.transitionDelay = (index * 0.1) + 's';
+                // For hero section elements, check if they've completed initial animation
+                const isHeroElement = element.classList.contains('hero-img-animate') || 
+                                     element.classList.contains('hero-subtitle-animate') || 
+                                     element.classList.contains('hero-title-animate') || 
+                                     element.classList.contains('hero-description-animate') || 
+                                     element.classList.contains('hero-button-animate');
+                
+                // Only add scroll-visible if element is ready (initial animation complete or not a hero element)
+                if (!isHeroElement || element.classList.contains('animation-complete')) {
+                  element.classList.add('scroll-visible');
+                  // Stagger animation for service cards
+                  if (element.classList.contains('scroll-animate-bottom')) {
+                    const cards = document.querySelectorAll('.scroll-animate-bottom');
+                    const index = Array.from(cards).indexOf(element);
+                    element.style.transitionDelay = (index * 0.1) + 's';
+                  }
+                  // Stagger animation for destination cards
+                  if (element.classList.contains('scroll-animate-scale')) {
+                    const cards = document.querySelectorAll('.scroll-animate-scale');
+                    const index = Array.from(cards).indexOf(element);
+                    element.style.transitionDelay = (index * 0.15) + 's';
+                  }
+                  // Stagger animation for booking left items
+                  if (element.classList.contains('scroll-animate-left')) {
+                    const items = document.querySelectorAll('.scroll-animate-left');
+                    const index = Array.from(items).indexOf(element);
+                    element.style.transitionDelay = (index * 0.15) + 's';
+                  }
+                  // Stagger animation for partner logos
+                  if (element.classList.contains('scroll-animate-fade')) {
+                    const items = document.querySelectorAll('.scroll-animate-fade');
+                    const index = Array.from(items).indexOf(element);
+                    element.style.transitionDelay = (index * 0.1) + 's';
+                  }
+                  // Stagger animation for hero right (image)
+                  if (element.classList.contains('scroll-animate-right')) {
+                    const items = document.querySelectorAll('.scroll-animate-right');
+                    const index = Array.from(items).indexOf(element);
+                    element.style.transitionDelay = (index * 0.1) + 's';
+                  }
                 }
               }
             } else {
               // Scrolling up
               // 1. Animate IN when entering viewport from bottom
               if (isEnteringFromBottom && !element.classList.contains('scroll-visible')) {
-                element.classList.add('scroll-visible');
-                // Stagger animation for service cards
-                if (element.classList.contains('scroll-animate-bottom')) {
-                  const cards = document.querySelectorAll('.scroll-animate-bottom');
-                  const index = Array.from(cards).indexOf(element);
-                  element.style.transitionDelay = (index * 0.1) + 's';
-                }
-                // Stagger animation for destination cards
-                if (element.classList.contains('scroll-animate-scale')) {
-                  const cards = document.querySelectorAll('.scroll-animate-scale');
-                  const index = Array.from(cards).indexOf(element);
-                  element.style.transitionDelay = (index * 0.15) + 's';
-                }
-                // Stagger animation for booking left items
-                if (element.classList.contains('scroll-animate-left')) {
-                  const items = document.querySelectorAll('.scroll-animate-left');
-                  const index = Array.from(items).indexOf(element);
-                  element.style.transitionDelay = (index * 0.15) + 's';
-                }
-                // Stagger animation for partner logos
-                if (element.classList.contains('scroll-animate-fade')) {
-                  const items = document.querySelectorAll('.scroll-animate-fade');
-                  const index = Array.from(items).indexOf(element);
-                  element.style.transitionDelay = (index * 0.1) + 's';
+                // For hero section, ensure initial animation is complete
+                const isHeroElement = element.classList.contains('hero-img-animate') || 
+                                     element.classList.contains('hero-subtitle-animate') || 
+                                     element.classList.contains('hero-title-animate') || 
+                                     element.classList.contains('hero-description-animate') || 
+                                     element.classList.contains('hero-button-animate');
+                
+                if (!isHeroElement || element.classList.contains('animation-complete')) {
+                  element.classList.add('scroll-visible');
+                  // Stagger animation for service cards
+                  if (element.classList.contains('scroll-animate-bottom')) {
+                    const cards = document.querySelectorAll('.scroll-animate-bottom');
+                    const index = Array.from(cards).indexOf(element);
+                    element.style.transitionDelay = (index * 0.1) + 's';
+                  }
+                  // Stagger animation for destination cards
+                  if (element.classList.contains('scroll-animate-scale')) {
+                    const cards = document.querySelectorAll('.scroll-animate-scale');
+                    const index = Array.from(cards).indexOf(element);
+                    element.style.transitionDelay = (index * 0.15) + 's';
+                  }
+                  // Stagger animation for booking left items
+                  if (element.classList.contains('scroll-animate-left')) {
+                    const items = document.querySelectorAll('.scroll-animate-left');
+                    const index = Array.from(items).indexOf(element);
+                    element.style.transitionDelay = (index * 0.15) + 's';
+                  }
+                  // Stagger animation for partner logos
+                  if (element.classList.contains('scroll-animate-fade')) {
+                    const items = document.querySelectorAll('.scroll-animate-fade');
+                    const index = Array.from(items).indexOf(element);
+                    element.style.transitionDelay = (index * 0.1) + 's';
+                  }
+                  // Stagger animation for hero right (image)
+                  if (element.classList.contains('scroll-animate-right')) {
+                    const items = document.querySelectorAll('.scroll-animate-right');
+                    const index = Array.from(items).indexOf(element);
+                    element.style.transitionDelay = (index * 0.1) + 's';
+                  }
                 }
               }
               
